@@ -405,51 +405,52 @@ pytest
 
 ```bash
 # 只运行单元测试
+.\venv\Scripts\python.exe -m pytest tests/unit/test_image_utils.py -v
 pytest tests/unit/ -v
 
 # 只运行集成测试
-pytest tests/integration/ -v
+.\venv\Scripts\python.exe -m pytest tests/integration/ -v
 
 # 只运行UAT测试
-pytest tests/uat/ -v
+.\venv\Scripts\python.exe -m pytest tests/uat/ -v
 ```
 
 ### 3. 运行特定测试文件
 
 ```bash
-pytest tests/unit/test_image_utils.py -v
+.\venv\Scripts\python.exe -m pytest tests/unit/test_image_utils.py -v
 ```
 
 ### 4. 运行特定测试类
 
 ```bash
-pytest tests/unit/test_image_utils.py::TestImageSizeCalculation -v
+.\venv\Scripts\python.exe -m pytest tests/unit/test_image_utils.py::TestImageSizeCalculation -v
 ```
 
 ### 5. 运行特定测试函数
 
 ```bash
-pytest tests/unit/test_image_utils.py::TestImageSizeCalculation::test_scale_calculation_2x -v
+.\venv\Scripts\python.exe -m pytest tests/unit/test_image_utils.py::TestImageSizeCalculation::test_scale_calculation_2x -v
 ```
 
 ### 6. 使用标记运行测试
 
 ```bash
 # 运行标记为slow的测试
-pytest -m slow
+.\venv\Scripts\python.exe -m pytest -m slow
 
 # 排除GPU测试
-pytest -m "not gpu"
+.\venv\Scripts\python.exe -m pytest -m "not gpu"
 ```
 
 ### 7. 显示详细输出
 
 ```bash
 # 显示print输出
-pytest -s
+.\venv\Scripts\python.exe -m pytest -s
 
 # 显示详细的assert信息
-pytest -vv
+.\venv\Scripts\python.exe -m pytest -vv
 ```
 
 ### 8. 只运行失败的测试

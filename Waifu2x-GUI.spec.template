@@ -1,0 +1,202 @@
+# -*- mode: python ; coding: utf-8 -*-
+"""
+Waifu2x-GUI PyInstaller 配置文件
+
+使用方法:
+1. 将此文件重命名为 Waifu2x-GUI.spec
+2. 根据需要修改配置
+3. 运行: pyinstaller Waifu2x-GUI.spec
+
+注意: .spec 文件在 .gitignore 中，不会被提交到版本控制
+"""
+
+import os
+import sys
+from PyInstaller.utils.hooks import collect_data_files, collect_submodules
+
+# ============================================================
+# 配置区域 - 根据项目需要修改
+# ============================================================
+
+# 应用名称
+APP_NAME = 'Waifu2x-GUI'
+
+# 是否显示控制台窗口
+CONSOLE = False  # True = 调试版本, False = 发布版本
+
+# 应用图标 (可选)
+ICON_FILE = None  # 例如: 'icon.ico'
+
+# 是否使用 UPX 压缩
+USE_UPX = True
+
+# 是否去除调试符号
+STRIP = False
+
+# ============================================================
+# 依赖配置
+# ============================================================
+
+# 隐藏导入 - 动态导入的模块
+HIDDEN_IMPORTS = [
+    # 核心依赖
+    'waifu2x_vulkan',
+    
+    # PySide6 相关
+    'PySide6',
+    'PySide6.QtCore',
+    'PySide6.QtGui',
+    'PySide6.QtWidgets',
+    
+    # 项目模块
+    'conf',
+    'conf.config',
+    
+    # src 包
+    'src',
+    'src.qt',
+    'src.qt.qtmain',
+    'src.qt.com',
+    'src.qt.com.qtbubblelabel',
+    'src.qt.com.qtimg',
+    'src.qt.menu',
+    'src.qt.menu.qtabout',
+    'src.qt.menu.qtsetting',
+    'src.qt.util',
+    'src.qt.util.qttask',
+    'src.util',
+    'src.util.log',
+    'src.util.singleton',
+    'src.util.status',
+    'src.util.tool',
+    
+    # UI 模块
+    'ui',
+    'ui.main',
+    'ui.about',
+    'ui.setting',
+    'ui.img',
+    
+    # 图片资源
+    'images_rc',
+]
+
+# 额外的二进制文件 (DLL, SO 等)
+BINARIES = [
+    # 示例: 如果需要手动添加 DLL
+    # ('path/to/library.dll', '.'),
+]
+
+# 额外的数据文件
+DATAS = [
+    # 示例: 添加配置文件夹
+    # ('conf', 'conf'),
+    
+    # 如果使用外部资源文件（非 images_rc.py）
+    # ('images', 'images'),
+]
+
+# 排除的模块 - 减小文件大小
+EXCLUDES = [
+    'tkinter',      # 不使用 tkinter
+    'matplotlib',   # 不使用 matplotlib
+    'numpy',        # 如果不需要
+    'pandas',       # 如果不需要
+    'scipy',        # 如果不需要
+]
+
+# ============================================================
+# PyInstaller 配置 - 通常不需要修改
+# ============================================================
+
+block_cipher = None
+
+a = Analysis(
+    ['start.py'],
+    pathex=[],
+    binaries=BINARIES,
+    datas=DATAS,
+    hiddenimports=HIDDEN_IMPORTS,
+    hookspath=[],
+    hooksconfig={},
+    runtime_hooks=[],
+    excludes=EXCLUDES,
+    win_no_prefer_redirects=False,
+    win_private_assemblies=False,
+    cipher=block_cipher,
+    noarchive=False,
+)
+
+pyz = PYZ(
+    a.pure,
+    a.zipped_data,
+    cipher=block_cipher,
+)
+
+exe = EXE(
+    pyz,
+    a.scripts,
+    a.binaries,
+    a.zipfiles,
+    a.datas,
+    [],
+    name=APP_NAME,
+    debug=False,
+    bootloader_ignore_signals=False,
+    strip=STRIP,
+    upx=USE_UPX,
+    upx_exclude=[],
+    runtime_tmpdir=None,
+    console=CONSOLE,
+    disable_windowed_traceback=False,
+    argv_emulation=False,
+    target_arch=None,
+    codesign_identity=None,
+    entitlements_file=None,
+    icon=ICON_FILE,
+)
+
+# ============================================================
+# 如果使用 --onedir 模式，取消注释以下代码
+# ============================================================
+
+# coll = COLLECT(
+#     exe,
+#     a.binaries,
+#     a.zipfiles,
+#     a.datas,
+#     strip=STRIP,
+#     upx=USE_UPX,
+#     upx_exclude=[],
+#     name=APP_NAME,
+# )
+
+# ============================================================
+# macOS 应用包配置 (仅 macOS)
+# ============================================================
+
+# app = BUNDLE(
+#     coll,
+#     name=f'{APP_NAME}.app',
+#     icon=ICON_FILE,
+#     bundle_identifier='com.yourcompany.waifu2x',
+#     info_plist={
+#         'NSPrincipalClass': 'NSApplication',
+#         'NSHighResolutionCapable': 'True',
+#         'CFBundleShortVersionString': '1.0.0',
+#     },
+# )
+
+# ============================================================
+# 打包后处理
+# ============================================================
+
+print("=" * 60)
+print("PyInstaller 配置信息:")
+print(f"  应用名称: {APP_NAME}")
+print(f"  控制台模式: {'是' if CONSOLE else '否'}")
+print(f"  UPX 压缩: {'是' if USE_UPX else '否'}")
+print(f"  图标文件: {ICON_FILE if ICON_FILE else '未设置'}")
+print(f"  隐藏导入数量: {len(HIDDEN_IMPORTS)}")
+print(f"  排除模块数量: {len(EXCLUDES)}")
+print("=" * 60)
